@@ -12,3 +12,10 @@ class RegisterForm(BaseModel):
         max_length=128,
         min_length=2
     )
+    password: str = Field(
+        title='User password',
+        description='User password',
+        min_length=8,
+        max_length=64,
+        regex=r'((?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[\W]).{8,64})'
+    )
