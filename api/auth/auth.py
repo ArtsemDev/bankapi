@@ -33,10 +33,7 @@ async def register_user(register_form: RegisterForm):
     response_model_exclude={'password', 'hashed_password', 'pk'}
 )
 async def login(login_form: LoginForm):
-    user = await User.select(
-        select(User)
-        .filter(User.email == login_form.email)
-    )
+    user = await User.select(User.email == login_form.email)
     if user:
         user = user[0]
         try:
@@ -49,4 +46,4 @@ async def login(login_form: LoginForm):
             raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail='не верный пароль')
         else:
             return user_info
-    raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail='пользователь не найдет')
+    raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail='пользователь не найден')
