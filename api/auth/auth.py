@@ -4,7 +4,8 @@ from sqlalchemy import select
 from sqlalchemy.exc import IntegrityError
 
 from core.models import User
-from core.schemas import UserInfo, RegisterForm, LoginForm
+from core.schemas import UserInfo, RegisterForm, LoginForm, TokenSchema
+from core.settings import SECRET_KEY, EXPIRE_JWT_TOKEN, ALGORITHM, TOKEN_TYPE
 
 
 router = APIRouter()
@@ -29,8 +30,7 @@ async def register_user(register_form: RegisterForm):
 
 @router.post(
     '/login',
-    response_model=UserInfo,
-    response_model_exclude={'password', 'hashed_password', 'pk'}
+    response_model=TokenSchema,
 )
 async def login(login_form: LoginForm):
     user = await User.select(User.email == login_form.email)
