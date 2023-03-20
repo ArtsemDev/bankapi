@@ -7,7 +7,7 @@ from sqlalchemy.exc import IntegrityError
 from core.models import Post, User
 from core.schemas import PostDetail, PostCreateForm
 from core.settings import TOKEN_TYPE, ALGORITHM, SECRET_KEY
-from core.utils import send_mail
+from core.utils.qrcode import generate_qrcode
 
 post_router = APIRouter(prefix='/post')
 
@@ -54,8 +54,7 @@ async def post_detail(
 ):
     post = await Post.get(post_id)
     if post:
-        with open('img.png', 'rb') as file:
-            background_tasks.add_task(send_mail, 'pratayeu.a@gmail.com', post.title, post.body, file=file.read())
+        background_tasks.add_task(generate_qrcode, post.title)
         return PostDetail.from_orm(post)
     raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail='post not found')
 
