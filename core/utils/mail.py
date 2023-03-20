@@ -1,0 +1,17 @@
+import smtplib
+from email.mime.multipart import MIMEMultipart
+from email.mime.text import MIMEText
+
+
+def send_mail(to: str, subject: str, message: str) -> None:
+    msg = MIMEMultipart()
+    msg['From'] = 'pratayeu@yandex.ru'
+    msg['To'] = to
+    msg['Subject'] = subject
+    msg.attach(MIMEText(message))
+    server = smtplib.SMTP('smtp.yandex.ru', 587)
+    server.ehlo()
+    server.starttls()
+    server.ehlo()
+    server.login('pratayeu@yandex.ru', '')
+    server.sendmail('pratayeu@yandex.ru', to, msg.as_string())
